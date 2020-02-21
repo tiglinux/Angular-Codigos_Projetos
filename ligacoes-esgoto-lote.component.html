@@ -1,0 +1,66 @@
+<!--Elemento do PrimaNG para exibição das mensagens de erro/sucesso/warning-->
+<!-- View by : Tiago Ribeiro Santos -->
+<p-toast></p-toast>
+
+
+
+<!--Spinner de loading e overlay semi-transparente-->
+<div class="loading-indicator" *ngIf="isLoading">
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Breadcrumbs-->
+<p-breadcrumb [model]="items" [home]="home"> </p-breadcrumb>
+<!--Inicio da área das etapas-->
+
+<!--Inicio da área das etapas-->
+
+<div class="ui-g ui-fluid">
+    <div class="ui-lg-2 ui-md-0 ui-sm-0 "></div>
+
+    <div class="ui-lg-2 ui-md-4 ui-sm-4">
+        <button pButton type="button" label="Importação" class="ui-button-rounded" (click)="marcaImportacao()"
+            [ngClass]="{selectedButton: etapa===1}"></button>
+    </div>
+
+    <div class="ui-lg-1 ui-md-0 ui-sm-0 "></div>
+
+    <div class="ui-lg-2 ui-md-4 ui-sm-4">
+        <button pButton type="button" label="Validação" class="ui-button-rounded" (click)="marcaValidacao()"
+            [ngClass]="{selectedButton: etapa===2}"></button>
+    </div>
+
+    <div class="ui-lg-1 ui-md-0 ui-sm-0 "></div>
+
+    <div class="ui-lg-3 ui-md-4 ui-sm-4">
+        <button pButton type="button" label="Acompanhamento" class="ui-button-rounded" (click)="marcaAcompanhamento()"
+            [ngClass]="{selectedButton: etapa===3}"></button>
+    </div>
+
+    <div class="ui-lg-2 ui-md-2 ui-sm-0 "></div>
+</div>
+<!--Fim da área das etapas-->
+
+<!--Área dos componentes das etapas-->
+<div [ngSwitch]="etapa">
+    <app-ligacao-importacao *ngSwitchDefault></app-ligacao-importacao>
+    <app-ligacao-validacao *ngSwitchCase="2"></app-ligacao-validacao>
+    <app-ligacao-acompanhamento *ngSwitchCase="3"></app-ligacao-acompanhamento>
+</div>
+
+
