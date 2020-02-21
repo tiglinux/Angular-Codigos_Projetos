@@ -1,0 +1,157 @@
+<!--Elemento do PrimaNG para exibição das mensagens de erro/sucesso/warning-->
+<p-toast></p-toast>
+
+
+
+<!--Spinner de loading e overlay semi-transparente-->
+<div class="loading-indicator" *ngIf="isLoading">
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Inicio do grid de monitoramento-->
+<div>
+    <h5>Em processamento</h5>
+    <p-table #tabelaMonitoramento exportFilename="monitoramento_lacre-padrao-lote" csvSeparator=";"
+        [rows]="configuracaoTabela1.itensPorPagina.valor" [totalRecords]="configuracaoTabela1.numeroRegistros"
+        [loading]="configuracaoTabela1.bloquear" [lazy]="true" (onLazyLoad)="carregarPaginaTabela1($event)"
+        [paginator]="true" [autoLayout]="true" [value]="configuracaoTabela1.listaRegistros" dataKey="id"
+        [customSort]="true">
+
+        <!--Linha de configuração e exportação-->
+        <ng-template pTemplate="caption">
+            <div class="informacoesPagina">
+                Mostrar
+                <p-dropdown [options]="configuracaoTabela1.listaRegistrosPorPagina"
+                    [(ngModel)]="configuracaoTabela1.itensPorPagina" placeholder="Selecione" optionLabel="valor"
+                    (onChange)="numeroRegistrosChange1($event)">
+                </p-dropdown> de {{configuracaoTabela1.numeroRegistros}} registros
+                <span *ngIf="configuracaoTabela1.numeroRegistros>0" (click)="gerarCSV1()" class="linkExportacao"><i
+                        class="pi pi-file-excel"></i>Exportar</span>
+            </div>
+        </ng-template>
+
+        <!--Cabeçalho-->
+        <ng-template pTemplate="header" let-colunas>
+            <tr>
+               <!--Fim do grid de respostas-->
+                <th class="colunaGenerica" style="width:25%;" [pSortableColumn]="'dataHoraInicioProcesso'">
+                    Data Hora Início
+                    <p-sortIcon [field]="'dataHoraInicioProcesso'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 25%;" [pSortableColumn]="'dataHoraFimProcesso'">
+                    Data Fim Processo
+                    <p-sortIcon [field]="'dataHoraFimProcesso'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 25%;" [pSortableColumn]="'ultimoArquivoExecutado'">
+                    Último Arquivo Executado
+                    <p-sortIcon [field]="'ultimoArquivoExecutado'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 25%;" [pSortableColumn]="'status'">
+                    Status
+                    <p-sortIcon [field]="'status'"></p-sortIcon>
+            </tr>
+        </ng-template>
+
+        <!--Grid-->
+        <ng-template pTemplate="body" let-registro>
+            <tr [pSelectableRow]="true">
+               <td class="colunaGenerica">
+                    {{registro.dataHoraInicioProcesso | date:"dd/MM/yyyy HH:mm"}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.dataHoraFimProcesso | date:"dd/MM/yyyy HH:mm"   }}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.ultimoArquivoExecutado}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.status }}
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</div>
+<!--Fim do grid de monitoramento-->
+
+<!--Inicio do grid de respostas-->
+<div style="margin-top: 20px;">
+    <h5>Processamento concluído</h5>
+    <p-table #tabelaResultado exportFilename="resultado_processamento_lacre-padrao-lote" csvSeparator=";"
+        [rows]="configuracaoTabela2.itensPorPagina.valor" [paginator]="true"
+        [totalRecords]="configuracaoTabela2.numeroRegistros" [loading]="configuracaoTabela2.bloquear" 
+        [lazy]="true" (onLazyLoad)="carregarPaginaTabela2($event)" [autoLayout]="true"
+        [value]="configuracaoTabela2.listaRegistros" dataKey="id" [customSort]="true">
+
+        <!--Linha de configuração e exportação-->
+        <ng-template pTemplate="caption">
+            <div class="informacoesPagina">
+                Mostrar
+                <p-dropdown [options]="configuracaoTabela2.listaRegistrosPorPagina"
+                    [(ngModel)]="configuracaoTabela2.itensPorPagina" placeholder="Selecione" optionLabel="valor"
+                    (onChange)="numeroRegistrosChange2($event)">
+                </p-dropdown> de {{configuracaoTabela2.numeroRegistros}} registros
+                <span *ngIf="configuracaoTabela2.numeroRegistros>0" (click)="gerarCSV2()" class="linkExportacao"><i
+                        class="pi pi-file-excel"></i>Exportar</span>
+            </div>
+        </ng-template>
+
+        <!--Cabeçalho-->
+        <ng-template pTemplate="header" let-colunas>
+            <tr>
+                <th class="colunaGenerica" style="width: 14%;" [pSortableColumn]="'dataHoraInicioProcesso'">
+                    Data Hora Início
+                    <p-sortIcon [field]="'dataHoraInicioProcesso'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 16%;" [pSortableColumn]="'dataHoraFimProcesso'">
+                    Data Fim Processo
+                    <p-sortIcon [field]="'dataHoraFimProcesso'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 14%;" [pSortableColumn]="'ultimoArquivoExecutado'">
+                    Último Arquivo Executado
+                    <p-sortIcon [field]="'ultimoArquivoExecutado'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 14%;" [pSortableColumn]="'status'">
+                    Status
+                    <p-sortIcon [field]="'status'"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+
+        <!--Grid-->
+        <ng-template pTemplate="body" let-registro>
+            <tr [pSelectableRow]="true">
+                <td class="colunaGenerica">
+                    {{registro.dataHoraInicioProcesso | date:"dd/MM/yyyy HH:mm"}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.dataHoraFimProcesso | date:"dd/MM/yyyy HH:mm" }}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.ultimoArquivoExecutado}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.status }}
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</div>
+<!--Fim do grid de respostas-->
+
