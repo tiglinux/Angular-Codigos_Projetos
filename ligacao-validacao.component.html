@@ -1,0 +1,148 @@
+
+<!-- Aqui exibo as críticas , by : Tiago Ribeiro santos-->
+<p-toast></p-toast>
+
+<!--Elemento do PrimaNG para exibição das mensagens de erro/sucesso/warning-->
+<p-toast></p-toast>
+
+<!--Elemento da caixa de dialogo para confirmação. Aparece quando se aperta o botão 'Limpar'-->
+<p-confirmDialog key="lacrePadraoLoteValidacao" [closable]="false" [style]="{width: '50vw'}" blockScroll="false">
+</p-confirmDialog>
+
+<!--Spinner de loading e overlay semi-transparente-->
+<div class="loading-indicator" *ngIf="isLoading">
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Mensagem que informa o usuário se há críticas sendo processadas no background-->
+<p-messages key="info" [value]="message" [closable]="false"></p-messages>
+
+<!--Inicio do grid-->
+<div>
+    <p-table #tabelaCriticas exportFilename="lacre_padrao_lote_criticas" csvSeparator=";"
+        [rows]="configuracaoTabela.itensPorPagina.valor" [totalRecords]="configuracaoTabela.numeroRegistros"
+        [lazy]="true" (onLazyLoad)="carregarPaginaTabela($event)" [customSort]="true"
+        [paginator]="true" [autoLayout]="true" [value]="configuracaoTabela.listaRegistros" dataKey="id"
+        >
+
+        <!--Linha de configuração e exportação-->
+        <ng-template pTemplate="caption">
+            <div class="informacoesPagina">
+                Mostrar
+                <p-dropdown [options]="configuracaoTabela.listaRegistrosPorPagina"
+                    [(ngModel)]="configuracaoTabela.itensPorPagina" placeholder="Selecione" optionLabel="valor"
+                    (onChange)="numeroRegistrosChange($event)">
+                </p-dropdown> <!--de {{configuracaoTabela.numeroRegistros}} registros dos quais {{totalCriticas}} possuem críticas.-->
+                <span *ngIf="configuracaoTabela.numeroRegistros>0" (click)="gerarCSV()" class="linkExportacao">
+                    <i class="pi pi-file-excel"></i>Exportar
+                </span>
+            </div>
+        </ng-template>
+
+        <!--Cabeçalho-->
+        <ng-template pTemplate="header" let-colunas>
+            <tr>
+                <th class="colunaGenerica" style="width: 11%;" [pSortableColumn]="'id'">
+                    Id 
+                    <p-sortIcon [field]="'id'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 11%;" [pSortableColumn]="'idCritica'">
+                    Id Crítica
+                    <p-sortIcon [field]="'idCritica'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 11%;" [pSortableColumn]="'matriculaImovel'">
+                    Matrícula Imóvel
+                    <p-sortIcon [field]="'matriculaImovel'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 7;" [pSortableColumn]="'sitLigacaoEsgoto'">
+                    Situação Ligação Esgoto
+                    <p-sortIcon [field]="'sitLigacaoEsgoto'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 7%;" [pSortableColumn]="'esgotoTratado'">
+                    Esgoto Tratado
+                    <p-sortIcon [field]="'esgotoTratado'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 11%;" [pSortableColumn]="'dataVistoria'">
+                    Data Vistoria
+                    <p-sortIcon [field]="'dataVistoria'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 23%;" [pSortableColumn]="'mensagemDossie'">
+                    Mensagem Dossiê
+                    <p-sortIcon [field]="'mensagemDossie'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 8%;" [pSortableColumn]="'suspCobrancaDisponibilidade'">
+                   Suspensão Cobrança Disponibilidade
+                    <p-sortIcon [field]="'suspCobrancaDisponibilidade'"></p-sortIcon>
+                </th>
+                <th class="colunaGenerica" style="width: 11%;" [pSortableColumn]="'suspCobrancaDisponibilidade'">
+                    Crítica
+                     <p-sortIcon [field]="'suspCobrancaDisponibilidade'"></p-sortIcon>
+                 </th>
+
+            </tr>
+        </ng-template>
+
+        <!--Grid-->
+        <ng-template pTemplate="body" let-registro>
+            <tr [pSelectableRow]="true">
+                <td class="colunaGenerica">
+                    {{registro.id}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.idCritica}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.matriculaImovel}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.sitLigacaoEsgoto}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.esgotoTratado}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.dataVistoria}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.mensagemDossie}}
+                </td>
+                <td class="colunaGenerica">
+                    {{registro.suspCobrancaDisponibilidade}} 
+                </td>
+                <td>
+                    {{registro.critica ? registro.critica:'ok'}}
+                </td>
+            </tr>
+        </ng-template>
+        
+    </p-table>
+</div>
+<!--Término do grid-->
+
+<!--Barra de botões-->
+<div class="barraBotoes">
+    <div class="containerBotoes">
+        <p-button 
+            icon="pi pi-arrow-circle-left" label="Retornar" (click)="retornar()" styleClass="ui-button-warning">
+        </p-button>
+        <p-button 
+            id="botaoConfirmar" [disabled]="status" 
+            icon="pi pi-plus" label="Confirmar" (click)="confirmaCadastro()" styleClass="ui-button-success" >
+        </p-button>
+    </div>
+</div>
