@@ -1,0 +1,98 @@
+<!--Elemento do PrimaNG para exibição das mensagens de erro/sucesso/warning-->
+<p-toast></p-toast>
+
+
+<!--Elemento da caixa de dialogo para confirmação. Aparece quando se aperta o botão 'Limpar'-->
+<p-confirmDialog key="limparLigacaoEsgoto" [closable]="false" [style]="{width: '50vw'}" blockScroll="false">
+</p-confirmDialog>
+
+
+<div class="containerComponente">
+    <div>
+        <p-tabView>
+            <p-tabPanel header="Importação Planilha Excel - Ligações Esgoto em Lote">
+                <div class="containerFormulario">
+
+                    <div class="ui-panel-content ui-widget-content">
+                        <form [formGroup]="grupoComponentes">
+                            <div class="ui-fluid">
+                                <div class="ui-lg-12 ui-g-12 ui-md-12">
+                                    <p><span><strong>Instruções</strong></span></p>
+                                    <p>Importação de arquivo Excel com matrículas,situação de esgoto,situação do imóvel
+                                        e data de ligação com geração de Críticas.
+                                    </p>
+                                    <p style="margin-top: 10px;">
+                                        Apenas arquivos com extensão .XLS ou .XLSX (Excel)
+                                    </p>
+                                    <p style="margin-top: 10px;">
+                                        O arquivo será processado e deverá levar alguns segundos. Caso deseje saber o estado atual 
+                                        do processamento é só clicar no botão "Atualizar".
+                                    </p>
+                                </div>
+
+                                <div class="ui-lg-12 ui-g-12 ui-md-12">
+                                    <span><strong>Status:
+                                        </strong>{{descricaoEstadoProcessamento}}</span>
+                                    &nbsp;
+                                    
+                                    <br>
+                                   <p> Atualizar:</p>
+                                  
+                                    <p-button icon="pi pi-refresh" (click)="atualizarEstadoProcessamento(null)"
+                                        pTooltip="Atualizar" tooltipPosition="top"></p-button>
+                                </div>
+
+                                <div class="ui-lg-12 ui-g-12 ui-md-12">
+
+                                    <div *ngIf="processando">
+
+                                        <p-fileUpload #fileUpload id="nomeLigacaoEsgotoLote" name="arquivo"
+                                            (onUpload)="eventoSelecaoArquivo($event)" (onError)="eventoErro($event)"
+                                            (onBeforeUpload)="eventoPreparacaoUpload($event)"
+                                            (onSelect)="eventoAposSelecionarArquivo($event)"
+                                            (onRemove)="eventoRemoverArquivo($event)" url="" [multiple]="true"
+                                            accept=" .xls,.xlsx" maxFileSize="30000000" chooseLabel="Selecionar"
+                                            uploadLabel="Enviar" cancelLabel="Cancelar"
+                                            invalidFileSizeMessageSummary="{0}: Tamanho de arquivo inválido, "
+                                            invalidFileSizeMessageDetail="o máximo permitido é {0}."
+                                            invalidFileTypeMessageSummary="{0}: Extensão inválida, "
+                                            invalidFileTypeMessageDetail="tipos permitidos: XLS e XLSX"
+                                            [showUploadButton]="false" [showCancelButton]="false">
+                                            wUploadButton]="false" [showCancelButton]="false">
+                                            <ng-template pTemplate="toolbar">
+                                                <span>{{arquivosSelecionados}} Arquivos selecionados -
+                                                    {{tamanhoArquivosSelecionados | number}}MB</span>
+                                            </ng-template>
+                                            <ng-template pTemplate="content">
+                                            </ng-template>
+                                        </p-fileUpload>
+
+
+                                    </div>
+                                    <div *ngIf="!processando">
+                                        <span>O servidor ainda está importando arquivos da última remessa. Aguarde o
+                                            término para enviar mais arquivos.</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="barraBotoes">
+                        <div class="containerBotoes" *ngIf="processando">
+                            <p-button [disabled]="!(this.controlePermissoes[0].nivelAcesso > 1)" id="btnEnviarArquivo"
+                                icon="pi pi-plus" label="Enviar" styleClass="ui-button-success" (click)="salvar()">
+                            </p-button>
+                            <p-button [disabled]="!(this.controlePermissoes[0].nivelAcesso > 1)" icon="pi pi-trash"
+                                id="btnLimparFiltro" label="Limpar" (onClick)="limpaFiltros()"
+                                styleClass="ui-button-warning">
+                            </p-button>
+                        </div>
+                    </div>
+
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
