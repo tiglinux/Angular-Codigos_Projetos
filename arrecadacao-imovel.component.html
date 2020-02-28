@@ -1,0 +1,106 @@
+<p-toast></p-toast>
+
+<p-confirmDialog key="cobrancaImovel" [closable]="false" [style]="{width: '50vw'}" blockScroll="false">
+</p-confirmDialog>
+
+<div class="loading-indicator" *ngIf="isLoading">
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+            <div class="preloader-line">
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Aviso" [(visible)]="dialog">
+    <p>O formulário ainda não foi salvo. Deseja realmente sair?</p>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="dialog=false; formSalvo=true" label="Sim"></button>
+        <button type="button" pButton icon="pi pi-times" (click)="dialog=false" label="Não"
+            class="ui-button-secondary"></button>
+    </p-footer>
+</p-dialog>
+
+<div class="containerComponente">
+    <form [formGroup]="formAcompanhamento">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12 alinha-vertical">
+                
+                <div class="ui-g-3">
+                    <label for="matriculaImovel" style="margin-top: 5px;">Matrícula do Imóvel:</label>
+                </div>
+                <div class="ui-g-3">
+                    <p-inputMask id="matriculaImovel" type="text" formControlName="matriculaImovel"
+                        [style]="{'text-align': 'center'}" pKeyFilter="int" mask="9999999-9"
+                        pTooltip="Matrícula do imóvel" tooltipPosition="top">
+                </p-inputMask>
+                </div>
+                <div class="ui-g-2">
+                    <p-button icon="pi pi-search" (click)="carregarImovel()" styleClass="ui-button-primary"
+                        pTooltip="Consultar imóvel" tooltipPosition="top" dis>
+                    </p-button>
+                </div>
+            </div>
+            <div class="ui-g-6 alinha-vertical">
+                <div class="ui-g-5">
+                    <label for="agenciaArrecadora">Agência Arrecadora:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input id="agenciaArrecadora"  name="agenciaArrecadora"
+                    formControlName="agenciaArrecadora" 
+                    pInputText>
+                </div>
+            </div>
+
+            <div class="ui-g-6 alinha-vertical">
+                <div class="ui-g-5">
+                    <label for="agenteArrecador">Agente Arrecador:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input id="agenteArrecador" name="agenteArrecador"
+                    formControlName="agenteArrecador"  
+                    pInputText>
+                </div>
+            </div>
+            <div class="ui-g-6 alinha-vertical">
+                <div class="ui-g-5">
+                    <label for="contaCorrente">Conta Corrente:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input id="contaCorrente" name="contaCorrente"
+                    formControlName="contaCorrente" 
+                    pInputText>
+                </div>
+            </div>
+
+            <div class="ui-g-6 alinha-vertical">
+                <div class="ui-g-5">
+                    <label for="dataInclusaoD">Data Inclusão:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input id="dataInclusaoD" name="dataInclusaoD"
+                    formControlName="dataInclusaoD" 
+                    pInputText>
+                </div>
+            </div>
+            
+            <!-- Limpa todos os campos-->
+            <div class="barraBotoes">
+                <div class="containerBotoes">
+                  <p-button styleClass="ui-button-warning" icon="pi pi-trash" type='reset' label="{{limparBotao}}"></p-button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
