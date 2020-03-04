@@ -1,0 +1,77 @@
+<!-- date : 28/02/2010 - Tiago Ribeiro Santos -->
+
+<!--Elemento do PrimaNG para exibição das mensagens de erro/sucesso/warning-->
+<p-toast></p-toast>
+
+<!--Elemento da caixa de dialogo para confirmação. Aparece quando se aperta o botão 'Limpar'-->
+<p-confirmDialog key="limparAnexo" [closable]="false" [style]="{width: '50vw'}" blockScroll="false">
+</p-confirmDialog>
+
+<!-- Consulta de Matrícula de Imóvel  Início de Input text para Matrícula-->
+<div class="containerComponente">
+    <form [formGroup]="formAnexo">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12 alinha-vertical">
+                <div class="ui-g-2">
+                    <label for="matriculaImovel" style="margin-top: 5px;">Matrícula do Imóvel:</label>
+                </div>
+                <div class="ui-g-3">
+                    <p-inputMask id="matriculaImovel" type="text" formControlName="matriculaImovel"
+                        [style]="{'text-align': 'center'}" pKeyFilter="int" mask="9999999-9"
+                        pTooltip="Matrícula do imóvel" tooltipPosition="top">
+                    </p-inputMask>
+                </div>
+                <div class="ui-g-3">
+                    <p-button icon="pi pi-search" (click)="carregarImovel()" styleClass="ui-button-primary"
+                        pTooltip="Consultar imóvel" tooltipPosition="top" dis>
+                    </p-button>
+                </div>
+            </div>
+        </div>
+        <!--Tela de Upload , Inserção de Arquivo ,envio.  Single Upload-->
+        <div class="ui-g-12 alinha-vertical">
+            <p-fileUpload #fileUpload name='arquivo' chooseLabel="Inserir" cancelLabel="Cancelar" process="txt "
+                mode="advanced" update="messages" (fileLimit)="10000000" maxFileSize="30000000"
+                (onError)="eventoErro($event)" (onSelect)="eventoAposSelecionarArquivo($event)"
+                invalidFileSizeMessageSummary="{0}: Tamanho de arquivo acima do limite, "
+                invalidFileSizeMessageDetail="o máximo permitido é {0}." [showUploadButton]="false"
+                [showCancelButton]="false" invalidFileTypeMessageSummary="Tipo de arquivo inválido"
+                (onBeforeUpload)="eventoPreparacaoUpload($event)" (onUpload)="eventoSelecaoArquivo($event)" url="">
+
+
+                <ng-template pTemplate="toolbar">
+                    <span>
+
+                        {{arquivosSelecionados}} Arquivo Selecionado - {{tamanhoArquivosSelecionados | number}}MB
+                    </span>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <!-- Fazer script para verificação.-->
+                    <label for="descricao" style="padding:15px;">Descrição:</label>
+                    <input id="descricao" name="descricao" type="text" formControlName="descricao" [style]="{'text-align': 'center'}"
+                       pInputText>
+
+                </ng-template>
+
+
+            </p-fileUpload>
+
+        </div>
+        <div class="barraBotoes">
+            <div class="containerBotoes">
+                <!-- Botão de enviar desabilitado se permissão de usuário for não for maior que 1. -->
+                <p-button [disabled]="!(this.controlePermissoes[0].nivelAcesso > 1)" id="btnEnviarArquivo"
+                    icon="pi pi-plus" label="Enviar" styleClass="ui-button-success" (click)="salvar()">
+                </p-button>
+                <!-- Botão de Limapar desabilitado se permissão de usuário for não for maior que 1. -->
+                <p-button [disabled]="!(this.controlePermissoes[0].nivelAcesso > 1)" icon="pi pi-trash"
+                    id="btnLimparFiltro" label="Limpar" (onClick)="limpaFiltros()" styleClass="ui-button-warning">
+                </p-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Grid de Resultado de consulta de matrícula de Imóvel-->
+
+<!--Inicio do grid de Resultado de Consulta de Matrícula de Imóvel -->
